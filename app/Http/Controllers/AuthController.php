@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\UserStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
+use App\Helpers\CMail;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -67,5 +73,64 @@ class AuthController extends Controller
             return redirect()->route('admin.dashboard');
         }
         return redirect()->route('admin.login')->withInput()->with('fail', 'Invalid credentials');
+    }
+
+    public function sendPasswordResetLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email'
+        ], [
+            'email.required' => 'The :attribute is required.',
+            'email.email' => 'Invalid email address.',
+            'email.exists' => 'We can not find a user with this email address.',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        $token = $this->createOrUpdatePasswordResetToken($user->email);
+
+        if ($this->sendPasswordResetEmail($user, $token)) {
+            return redirect()->route('admin.forgot')
+                ->with('success', 'Password reset link has been sent to your email address.');
+        }
+
+        return redirect()->route('admin.forgot')
+            ->with('fail', 'Something went wrong. Please try again later.');
+    }
+
+
+    private function createOrUpdatePasswordResetToken(string $email): string
+    {
+        $token = base64_encode(Str::random(64));
+        $tokenData = [
+            'token' => $token,
+            'created_at' => Carbon::now(),
+        ];
+
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $email],
+            $tokenData
+        );
+
+        return $token;
+    }
+
+
+    private function sendPasswordResetEmail(User $user, string $token): bool
+    {
+        $resetUrl = route('admin.reset_password_form', ['token' => $token]);
+
+        $emailBody = view('email-templates.forgot-template', [
+            'link' => $resetUrl,
+            'user' => $user,
+        ])->render();
+
+        $mailConfig = [
+            'recipient_address' => $user->email,
+            'recipient_name' => $user->name,
+            'subject' => 'Reset Password',
+            'body' => $emailBody
+        ];
+
+        return CMail::send($mailConfig);
     }
 }
