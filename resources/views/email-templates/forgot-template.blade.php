@@ -121,7 +121,7 @@
                 {{ $link }}
             </p>
 
-            <p>This password reset link will expire in {{ $expirationTime ?? '60 minutes' }}.</p>
+            <p>This password reset link will expire in '15 minutes'.</p>
 
             <p>Best regards,<br>The Blog Team</p>
         </div>
