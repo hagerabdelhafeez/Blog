@@ -56,11 +56,6 @@ class User extends Authenticatable
         ];
     }
 
-    // public function getPictureAttribute($value)
-    // {
-    //     return $value ? asset('storage/users/' . $value) : asset('storage/users/avatar.png');
-    // }
-
     public function getPictureAttribute($value)
     {
         $usersPath = 'storage/users';
