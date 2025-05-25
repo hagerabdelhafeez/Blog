@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <!-- Basic Page Info -->
     <meta charset="utf-8" />
@@ -163,10 +164,10 @@
                 </div>
             </div>
             <livewire:admin.top-user-info>
-            <div class="github-link">
-                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="/back/vendors/images/github.svg"
-                        alt="" /></a>
-            </div>
+                <div class="github-link">
+                    <a href="https://github.com/dropways/deskapp" target="_blank"><img
+                            src="/back/vendors/images/github.svg" alt="" /></a>
+                </div>
         </div>
     </div>
 
@@ -351,6 +352,28 @@
     <script src="/back/vendors/scripts/script.min.js"></script>
     <script src="/back/vendors/scripts/process.js"></script>
     <script src="/back/vendors/scripts/layout-settings.js"></script>
+    <script>
+        document.addEventListener('livewire:init', () => {
+            // Listen for the 'swalAlert' event from your Livewire component
+            Livewire.on('swalAlert', (params) => {
+                // Use the SweetAlert2 library with the parameters passed from PHP
+                Swal.fire({
+                    title: params[0].title,
+                    icon: params[0].icon,
+                    draggable: params[0].draggable
+                    // You can add any other SweetAlert2 options here
+                });
+            });
+
+            // You already have a 'showToastr' event listener for your other alerts
+            // Livewire.on('showToastr', (data) => {
+            //     Toast.fire({
+            //         icon: data.type,
+            //         title: data.message
+            //     });
+            // });
+        });
+    </script>
     @stack('scripts')
 </body>
 
