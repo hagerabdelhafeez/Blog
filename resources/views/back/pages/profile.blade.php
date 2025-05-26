@@ -21,5 +21,41 @@
         </div>
     </div>
 
-   <livewire:admin.profile>
-@endsection
+    <livewire:admin.profile>
+    @endsection
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#profilePictureFile').kropify({
+                    preview: 'image#profilePicturePreview',
+                    viewMode: 1,
+                    aspectRatio: 1,
+                    cancelButtonText: 'Cancel',
+                    resetButtonText: 'Reset',
+                    cropButtonText: 'Crop & update',
+                    processURL: "{{ route('admin.update_profile_picture') }}",
+                    maxSize: 2097152, //2MB
+                    showLoader: true,
+                    animationClass: 'headShake', //headShake, bounceIn, pulse
+                    fileName: 'profilePictureFile',
+                    success: function(data) {
+                        if (data.status == 1) {
+                            Livewire.dispatch('updateTopUserInfo', []);
+                            Livewire.dispatch('updateProfile', []);
+                            Swal.fire({
+                                title: data.message,
+                                icon: 'success',
+                                draggable: true
+                            });
+                        } else {
+                            Swal.fire({
+                                title: data.message,
+                                icon: 'error',
+                                draggable: true
+                            });
+                        }
+                    }
+                });
+            });
+        </script>
+    @endpush
