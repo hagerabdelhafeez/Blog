@@ -67,4 +67,9 @@ class User extends Authenticatable
             return asset($defaultImage);
         }
     }
+
+    public function social_links()
+    {
+        return $this->belongsTo(UserSocialLink::class, 'id', 'user_id');
+    }
 }
