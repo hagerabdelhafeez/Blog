@@ -7,9 +7,7 @@
     <title>@yield('pageTitle')</title>
 
     <!-- Site favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/back/vendors/images/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/back/vendors/images/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/back/vendors/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/storage/settings/{{ settings()->site_favicon ?? '' }}" />
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -28,12 +26,12 @@
     <div class="login-header box-shadow">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <div class="brand-logo">
-                <a href="login.html">
-                    <img src="/back/vendors/images/deskapp-logo.svg" alt="" />
+                <a href="">
+                    <img src="/storage/settings/{{ settings()->site_logo ?? '' }}" alt="" />
                 </a>
             </div>
             <div class="login-menu">
-               
+
             </div>
         </div>
     </div>
