@@ -21,6 +21,9 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/core.css" />
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/icon-font.min.css" />
+    <link rel="stylesheet"  href="/extra-assets/jquery-ui-1.14.1/jquery-ui.min.css" />
+    <link rel="stylesheet"  href="/extra-assets/jquery-ui-1.14.1/jquery-ui.structure.min.css" />
+    <link rel="stylesheet"  href="/extra-assets/jquery-ui-1.14.1/jquery-ui.theme.min.css" />
     <link rel="stylesheet" type="text/css" href="/back/vendors/styles/style.css" />
     @kropifyStyles
 
@@ -289,7 +292,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="dropdown-toggle no-arrow">
+                        <a href="{{ route('admin.categories') }}" class="dropdown-toggle no-arrow">
                             <span class="micon fa fa-th-list"></span><span class="mtext">Categories</span>
                         </a>
                     </li>
@@ -356,7 +359,7 @@
     <script src="/back/vendors/scripts/script.min.js"></script>
     <script src="/back/vendors/scripts/process.js"></script>
     <script src="/back/vendors/scripts/layout-settings.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/extra-assets/jquery-ui-1.14.1/jquery-ui.min.js"></script>
     @kropifyScripts
 
     <script>
@@ -366,6 +369,7 @@
                 // Use the SweetAlert2 library with the parameters passed from PHP
                 Swal.fire({
                     title: params[0].title,
+                    text: params[0].text,
                     icon: params[0].icon,
                     draggable: params[0].draggable
                     // You can add any other SweetAlert2 options here

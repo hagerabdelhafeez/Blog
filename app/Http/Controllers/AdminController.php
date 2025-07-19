@@ -135,4 +135,12 @@ class AdminController extends Controller
             return response()->json(['status' => 0, 'message' => 'Make sure you updated general settings form first.']);
         }
     }
+
+    public function categoriesPage()
+    {
+        $data = [
+            'pageTitle' => 'Manage Categories',
+        ];
+        return view('back.pages.categories_page', $data);
+    }
 }
