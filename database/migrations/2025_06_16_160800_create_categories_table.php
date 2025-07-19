@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,8 +14,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->integer('parent')->defaule(0);
-            $table->integer('ordering')->defaule(1000);
+            $table->integer('parent')->default(0);
+            $table->integer('ordering')->default(1000);
             $table->timestamps();
         });
     }

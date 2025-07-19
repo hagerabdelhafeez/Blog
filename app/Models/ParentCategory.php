@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Model;
 
 class ParentCategory extends Model
 {
@@ -19,8 +19,13 @@ class ParentCategory extends Model
     {
         return [
             'slug' => [
-                'source' => 'name'
-            ]
+                'source' => 'name',
+            ],
         ];
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent', 'id');
     }
 }
