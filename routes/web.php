@@ -1,20 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-/**
+/*
  * Testimg Routes
  */
 Route::view('/example-page', 'example-page');
 Route::view('/example-auth', 'example-auth');
 
-/**
+/*
  * Admin Routes
  */
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -35,10 +35,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/logout', 'logoutHandler')->name('logout');
             Route::get('/profile', 'profileView')->name('profile');
             Route::post('/update-profile-picture', 'updateProfilePicture')->name('update_profile_picture');
-            Route::get('/settings', 'generalSettings')->name('settings');
-            Route::post('/update-logo', 'updateLogo')->name('update_logo');
-            Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
-            Route::get('/categories', 'categoriesPage')->name('categories');
+
+            Route::middleware(['OnlySuperAdmin'])->group(function () {
+                Route::get('/settings', 'generalSettings')->name('settings');
+                Route::post('/update-logo', 'updateLogo')->name('update_logo');
+                Route::post('/update-favicon', 'updateFavicon')->name('update_favicon');
+                Route::get('/categories', 'categoriesPage')->name('categories');
+            });
         });
     });
 });

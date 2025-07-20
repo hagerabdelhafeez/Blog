@@ -3,17 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\UserStatus;
+use App\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-use App\UserStatus;
-use App\UserType;
-
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,7 +62,7 @@ class User extends Authenticatable
         $defaultImage = 'storage/users/avatar.png';
 
         if ($value) {
-            return asset($usersPath . '/' . $value);
+            return asset($usersPath.'/'.$value);
         } else {
             return asset($defaultImage);
         }
@@ -71,5 +71,10 @@ class User extends Authenticatable
     public function social_links()
     {
         return $this->belongsTo(UserSocialLink::class, 'id', 'user_id');
+    }
+
+    public function getTypeAttribute($value)
+    {
+        return $value;
     }
 }
