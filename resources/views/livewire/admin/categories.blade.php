@@ -49,6 +49,9 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-block mt-1 text-center">
+                    {{ $pcategories->links('livewire::simple-bootstrap') }}
+                </div>
             </div>
         </div>
         <div class="col-12">
@@ -98,6 +101,9 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+                <div class="d-block mt-1 text-center">
+                    {{ $categories->links('livewire::simple-bootstrap') }}
                 </div>
             </div>
         </div>
