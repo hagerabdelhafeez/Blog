@@ -37,7 +37,7 @@
                         </div>
                         <div class="form-group">
                             <label for=""><b>Content</b>:</label>
-                            <textarea class="form-control" cols="30" rows="10" name="content" placeholder="Enter post content here..."></textarea>
+                            <textarea name="content" id="content" class="ckeditor form-control" cols="30" rows="10" placeholder="Enter post content here..."></textarea>
                             <span class="text-danger error-text content_error"></span>
                         </div>
                     </div>
@@ -109,11 +109,14 @@
 
 @push('scripts')
     <script src="/back/src/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+    <script src="/ckeditor/ckeditor.js"></script>
     <script>
         $('#addPostForm').on('submit', function(e) {
             e.preventDefault();
             var form = this;
+            var content = CKEDITOR.instances.content.getData();
             var formdata = new FormData(form);
+            formdata.append('content', content);
             $.ajax({
                 url: $(form).attr('action'),
                 method: $(form).attr('method'),
@@ -127,6 +130,7 @@
                 success: function(data) {
                     if (data.status == 1) {
                         $(form)[0].reset();
+                        CKEDITOR.instances.content.setData('');
                         $('input[name="tags"]').tagsinput('removeAll');
                         Swal.fire({
                             title: 'Success',

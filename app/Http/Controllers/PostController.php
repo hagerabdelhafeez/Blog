@@ -7,6 +7,8 @@ use App\Models\ParentCategory;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -56,6 +58,17 @@ class PostController extends Controller
 
             $upload = $file->move($path, $new_filename);
             if ($upload) {
+                /** Generate Resized Image and thumbnail */
+                $resized_path = $path.'resized/';
+                if (!File::isDirectory($resized_path)) {
+                    File::makeDirectory($resized_path, 0777, true, true);
+                }
+                // Thumbnail(Aspect ratio: 1)
+                Image::make($path.$new_filename)->fit(250, 250)->save($resized_path.'thumb_'.$new_filename);
+
+                // Resized image (Aspect ratio: 1.6)
+                Image::make($path.$new_filename)->fit(512, 320)->save($resized_path.'resized_'.$new_filename);
+
                 $post = new Post();
                 $post->author_id = Auth::user()->id;
                 $post->category = $request->category;
