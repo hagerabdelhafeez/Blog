@@ -13,7 +13,7 @@ class Posts extends Component
 {
     use WithPagination;
 
-    public $perPage = 2;
+    public $perPage = 4;
     public $categories_html;
 
     public $search;
