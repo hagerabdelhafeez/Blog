@@ -256,20 +256,30 @@ class Categories extends Component
     public function deleteCategoryAction($id)
     {
         $category = Category::findOrFail($id);
-        $delete = $category->delete();
-        if ($delete) {
+        if ($category->posts->count() > 0) {
+            $count = $category->posts->count();
             $this->dispatch('swalAlert', [
-                'title' => 'Deleted!',
-                'text' => 'Parent Category has been deleted successfully.',
-                'icon' => 'success',
+                'title' => 'Oops...',
+                'text' => 'You can not delete this category because it has ('.$count.') posts.',
+                'icon' => 'warning',
                 'draggable' => true,
             ]);
         } else {
-            $this->dispatch('swalAlert', [
-                'title' => "Oops...\n Something went wrong!",
-                'icon' => 'error',
-                'draggable' => true,
-            ]);
+            $delete = $category->delete();
+            if ($delete) {
+                $this->dispatch('swalAlert', [
+                    'title' => 'Deleted!',
+                    'text' => 'Category has been deleted successfully.',
+                    'icon' => 'success',
+                    'draggable' => true,
+                ]);
+            } else {
+                $this->dispatch('swalAlert', [
+                    'title' => "Oops...\n Something went wrong!",
+                    'icon' => 'error',
+                    'draggable' => true,
+                ]);
+            }
         }
     }
 

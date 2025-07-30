@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\ParentCategory;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -31,6 +32,10 @@ class Posts extends Component
         'sortBy' => ['except' => ''],
     ];
 
+    protected $listeners = [
+        'deletePostAction',
+    ];
+
     public function updatedSearch()
     {
         $this->resetPage();
@@ -54,6 +59,8 @@ class Posts extends Component
 
     public function mount()
     {
+        $this->author = Auth::user()->type == 'superAdmin' ? Auth::user()->id : '';
+
         $this->post_visibility = $this->visibility == 'public' ? 1 : 0;
 
         $categories_html = '';
@@ -79,6 +86,43 @@ class Posts extends Component
             }
         }
         $this->categories_html = $categories_html;
+    }
+
+    public function deletePost($id)
+    {
+        $this->dispatch('deletePost', ['id' => $id]);
+    }
+
+    public function deletePostAction($id)
+    {
+        $post = Post::findOrFail($id);
+        $path = storage_path('app/public/posts/');
+        $resized_path = $path.'resized/';
+        $old_featured_image = $post->featured_image;
+        if ($old_featured_image != '' && File::exists($path.$old_featured_image)) {
+            File::delete($path.$old_featured_image);
+            if (File::exists($resized_path.'resized_'.$old_featured_image)) {
+                File::delete($resized_path.'resized_'.$old_featured_image);
+            }
+            if (File::exists($resized_path.'thumb_'.$old_featured_image)) {
+                File::delete($resized_path.'thumb_'.$old_featured_image);
+            }
+        }
+        $delete = $post->delete();
+        if ($delete) {
+            $this->dispatch('swalAlert', [
+                'title' => 'Deleted!',
+                'text' => 'Post has been deleted successfully.',
+                'icon' => 'success',
+                'draggable' => true,
+            ]);
+        } else {
+            $this->dispatch('swalAlert', [
+                'title' => "Oops...\n Something went wrong!",
+                'icon' => 'error',
+                'draggable' => true,
+            ]);
+        }
     }
 
     public function render()

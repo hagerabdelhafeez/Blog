@@ -172,7 +172,6 @@ class PostController extends Controller
                 return response()->json(['status' => 0, 'message' => 'Image upload failed.']);
             }
         }
-        $post->author_id = Auth::user()->id;
         $post->category = $request->category;
         $post->title = $request->title;
         $post->slug = null;

@@ -80,7 +80,7 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->parent_category?->name ?? '-' }}</td>
-                                    <td>-</td>
+                                    <td>{{ $item->posts->count() }}</td>
                                     <td>
                                         <div class="table-actions">
                                             <a href="javascript:;" wire:click="editCategory({{ $item->id }})" class="text-primary mx-2">
